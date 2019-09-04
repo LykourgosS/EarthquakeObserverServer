@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16sp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activities.MainActivity">
+
+    <Button
+        android:id="@+id/button_start_server"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Server" />
+
+    <Button
+        android:id="@+id/button_stop_server"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Server" />
+
+    <Button
+        android:id="@+id/button_add_earthquake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Earthquake" />
+
+    <Button
+        android:id="@+id/button_send_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Notification" />
+
+</LinearLayout>

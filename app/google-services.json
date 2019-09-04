@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "8559869277",
+    "firebase_url": "https://earthquake-observer.firebaseio.com",
+    "project_id": "earthquake-observer",
+    "storage_bucket": "earthquake-observer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8559869277:android:9f41edd334452f1b",
+        "android_client_info": {
+          "package_name": "com.unipi.lykourgoss.earthquakeobserver.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8559869277-5b5jbus7ktcfe1fl3d8mbtpiv7kie83q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unipi.lykourgoss.earthquakeobserver.client",
+            "certificate_hash": "e045504b9ac88c9ab30654906e022b656b31b5db"
+          }
+        },
+        {
+          "client_id": "8559869277-br0ch6ij1fonro0klr9slae44mp0v6si.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCymIVfb_CbmwED3Uq1ky3vxPDUu-Nmn-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8559869277-br0ch6ij1fonro0klr9slae44mp0v6si.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8559869277:android:dcaf7b6b8174a194",
+        "android_client_info": {
+          "package_name": "com.unipi.lykourgoss.earthquakeobserver.server"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8559869277-s6pt3gt2149nqh5r3cl49p5kbr7g0oce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unipi.lykourgoss.earthquakeobserver.server",
+            "certificate_hash": "e045504b9ac88c9ab30654906e022b656b31b5db"
+          }
+        },
+        {
+          "client_id": "8559869277-br0ch6ij1fonro0klr9slae44mp0v6si.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCymIVfb_CbmwED3Uq1ky3vxPDUu-Nmn-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8559869277-br0ch6ij1fonro0klr9slae44mp0v6si.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
