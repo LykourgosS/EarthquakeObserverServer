@@ -32,6 +32,7 @@ public class ServerService extends Service implements DatabaseHandler.OnEarthqua
         Log.d(TAG, "onStartCommand: ");
 
         Intent intentNotification = new Intent(this, MainActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentNotification, 0);
 
         // todo only use foreground service on Oreo an higher -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
