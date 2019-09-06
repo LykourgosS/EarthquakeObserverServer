@@ -16,6 +16,8 @@ import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.Util;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, DatabaseHandler.OnEarthquakeListener {
 
@@ -56,7 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addEarthquake() {
-        databaseHandler.addEarthquake(new Earthquake(0, new Date().getTime()));
+        Map<String, Boolean> devices = new HashMap<>();
+        /*devices.put("1234567", true);
+        devices.put("qwerty", true);*/
+        databaseHandler.addEarthquake(new Earthquake(devices, new Date().getTime()));
         findViewById(R.id.button_add_earthquake).setEnabled(false);
     }
 

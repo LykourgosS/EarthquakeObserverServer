@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
-import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
+import com.unipi.lykourgoss.earthquakeobserver.server.filestoremove.DatabaseHandlerOld;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
@@ -34,7 +34,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private GoogleSignInClient googleSignInClient;
 
-    private DatabaseHandler databaseHandler;
+    private DatabaseHandlerOld databaseHandlerOld;
 
     /**
      * On the sign in button clicked methods called accordingly:
@@ -60,8 +60,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        //databaseHandler = new DatabaseHandler(Util.getUniqueId(this));
-        //databaseHandler.setDatabaseListener(this);
+        //databaseHandlerOld = new DatabaseHandlerOld(Util.getUniqueId(this));
+        //databaseHandlerOld.setDatabaseListener(this);
     }
 
     @Override

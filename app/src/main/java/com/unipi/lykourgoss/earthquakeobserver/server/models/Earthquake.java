@@ -1,5 +1,8 @@
 package com.unipi.lykourgoss.earthquakeobserver.server.models;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
  * on 03,September,2019.
@@ -7,9 +10,13 @@ package com.unipi.lykourgoss.earthquakeobserver.server.models;
 
 public class Earthquake {
 
+    public static final String ID = "id";
+
+    public static final String DEVICES = "devices";
+
     private String id;
 
-    private long deviceCount;
+    private Map<String, Boolean> devices;
 
     /**
      * time in milliseconds, since January 1, 1970 UTC (1970-01-01-00:00:00), in which the event
@@ -20,8 +27,8 @@ public class Earthquake {
     public Earthquake() {
     }
 
-    public Earthquake(long deviceCount, long timestamp) {
-        this.deviceCount = deviceCount;
+    public Earthquake(Map<String, Boolean> devices, long timestamp) {
+        this.devices = devices;
         this.timestamp = timestamp;
     }
 
@@ -33,11 +40,20 @@ public class Earthquake {
         this.id = id;
     }
 
-    public long getDeviceCount() {
-        return deviceCount;
+    public Map<String, Boolean> getDevices() {
+        return devices;
     }
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Earthquake{" +
+                "id='" + id + '\'' +
+                ", devices=" + devices.size() +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }
