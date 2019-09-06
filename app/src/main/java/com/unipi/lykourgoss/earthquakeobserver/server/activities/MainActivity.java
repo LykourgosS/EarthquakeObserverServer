@@ -7,8 +7,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
 import com.unipi.lykourgoss.earthquakeobserver.server.models.Earthquake;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
@@ -59,14 +57,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addEarthquake() {
         Map<String, Boolean> devices = new HashMap<>();
-        /*devices.put("1234567", true);
-        devices.put("qwerty", true);*/
-        databaseHandler.addEarthquake(new Earthquake(devices, new Date().getTime()));
+        devices.put("A", true);
+        devices.put("nn", true);
+        devices.put("a", true);
+        devices.put("m", true);
+        devices.put("o", true);
+        devices.put("u", true);
+        databaseHandler.addEarthquake(new Earthquake(devices, false, new Date().getTime()));
         findViewById(R.id.button_add_earthquake).setEnabled(false);
     }
 
     private void sendNotification() {
-        // The topic name can be optionally prefixed with "/topics/".
+        /*// The topic name can be optionally prefixed with "/topics/".
         String topic = "highScores";
 
         // See documentation on defining a message payload.
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Send a message to the devices subscribed to the provided topic.
         FirebaseMessaging.getInstance().send(message);
         // Response is a message ID string.
-//        System.out.println("Successfully sent message: " + response);
+//        System.out.println("Successfully sent message: " + response);*/
     }
 
     @Override

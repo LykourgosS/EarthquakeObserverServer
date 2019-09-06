@@ -32,12 +32,14 @@ public class DatabaseHandler implements ChildEventListener {
     private static final int MIN_DEVICE_COUNT = 1;
 
     private static final String MAJOR_ACTIVE_EVENTS_REF = "major-active-events";
+    private static final String EARTHQUAKES_REF = "earthquakes";
     private static final String ACTIVE_EARTHQUAKES_REF = "active-earthquakes";
     private static final String SAVED_EARTHQUAKES_REF = "saved-earthquakes";
 
     private static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     private DatabaseReference activeEventsRef;
+    private DatabaseReference earthquakesRef;
     private DatabaseReference activeEarthquakesRef;
     private DatabaseReference savedEarthquakesRef;
 
@@ -49,6 +51,7 @@ public class DatabaseHandler implements ChildEventListener {
 
     public DatabaseHandler(OnEarthquakeListener listener) {
         activeEventsRef = databaseReference.child(MAJOR_ACTIVE_EVENTS_REF);
+        earthquakesRef = databaseReference.child(EARTHQUAKES_REF);
         activeEarthquakesRef = databaseReference.child(ACTIVE_EARTHQUAKES_REF);
         savedEarthquakesRef = databaseReference.child(SAVED_EARTHQUAKES_REF);
         this.listener = listener;
@@ -64,24 +67,72 @@ public class DatabaseHandler implements ChildEventListener {
     }
 
     public void addEarthquake(Earthquake earthquake) {
-        lastEarthquakeId = activeEarthquakesRef.push().getKey();
-        earthquake.setId(lastEarthquakeId);
-        activeEarthquakesRef.child(lastEarthquakeId).setValue(earthquake).addOnCompleteListener(new OnCompleteListener<Void>() {
+        String id = earthquakesRef.push().getKey();
+        earthquake.setId(id);
+
+        earthquakesRef.child(id).setValue(earthquake).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d(TAG, "onComplete: saved = " + task.isSuccessful());
                 listener.onEarthquakeAdded(task.isSuccessful());
             }
         });
+
+        /*Map<String, Object> earthquakeAddition = new HashMap<>();
+
+        String idPath = ACTIVE_EARTHQUAKES_REF + "/" + id;
+        earthquakeAddition.put(idPath, true);
+
+        String earthquakePath = SAVED_EARTHQUAKES_REF + "/" + id;
+        earthquakeAddition.put(earthquakePath, earthquake);
+
+        databaseReference.updateChildren(earthquakeAddition).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "onComplete: saved = " + task.isSuccessful());
+                listener.onEarthquakeAdded(task.isSuccessful());
+            }
+        });*/
+        lastEarthquakeId = id;
     }
 
     private void updateEarthquake(String deviceId) {
         // path: /earthquakes/{earthquakeId}/devices/{deviceId}. And the value: true
-        activeEarthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(deviceId).setValue(true);
+        //savedEarthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(deviceId).setValue(true);
+
+        earthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(deviceId).setValue(true);
     }
 
     private void terminateEarthquake() {
-        // save earthquake from active-earthquakes to saved-earthquakes
+        // remove earthquake from active-earthquakes (no need for further action, it is already
+        // saved in saved-earthquakes when it first added)
+        //activeEarthquakesRef.child(lastEarthquakeId).setValue(null);
+
+        // update isActive and endTime fields of the last Earthquake object (path: /earthquakes)
+        Map<String, Object> earthquakeTermination = new HashMap<>();
+
+        earthquakeTermination.put(Earthquake.IS_ACTIVE, false);
+
+        earthquakeTermination.put(Earthquake.END_TIME, new Date().getTime());
+
+        earthquakesRef.child(lastEarthquakeId).updateChildren(earthquakeTermination).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "onComplete: Earthquake terminated = " + task.isSuccessful());
+            }
+        });
+
+        lastEarthquakeId = null;
+
+        /*databaseReference.updateChildren(earthquakeTermination).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "onComplete: saved = " + task.isSuccessful());
+                listener.onEarthquakeAdded(task.isSuccessful());
+            }
+        });*/
+
+        /*// save earthquake from active-earthquakes to saved-earthquakes
         activeEarthquakesRef.child(lastEarthquakeId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -96,7 +147,7 @@ public class DatabaseHandler implements ChildEventListener {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -108,7 +159,7 @@ public class DatabaseHandler implements ChildEventListener {
             devices.put(deviceId, true);
             if (devices.size() >= MIN_DEVICE_COUNT) {
                 if (!earthquakeIsActive) {
-                    addEarthquake(new Earthquake(devices, new Date().getTime()));
+                    addEarthquake(new Earthquake(devices, true, new Date().getTime()));
                     earthquakeIsActive = true;
                 } else {
                     updateEarthquake(deviceId);
