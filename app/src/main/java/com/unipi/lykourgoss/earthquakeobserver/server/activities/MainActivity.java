@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
+import com.unipi.lykourgoss.earthquakeobserver.server.models.ClientSettings;
 import com.unipi.lykourgoss.earthquakeobserver.server.models.Earthquake;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_stop_server).setOnClickListener(this);
         findViewById(R.id.button_add_earthquake).setOnClickListener(this);
         findViewById(R.id.button_send_notification).setOnClickListener(this);
+        findViewById(R.id.button_client_settings).setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        System.out.println("Successfully sent message: " + response);*/
     }
 
+    private void clientSettings() {
+        startActivity(new Intent(this, ClientSettingsActivity.class));
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -94,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_send_notification:
                 sendNotification();
+                break;
+            case R.id.button_client_settings:
+                clientSettings();
                 break;
         }
     }

@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.ClientSettingsActivity"></activity>
         <activity
             android:name=".activities.LaunchScreenActivity"
             android:theme="@style/AppTheme.LaunchTheme">
