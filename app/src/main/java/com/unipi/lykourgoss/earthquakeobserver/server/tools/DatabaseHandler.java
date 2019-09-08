@@ -28,20 +28,23 @@ public class DatabaseHandler implements ChildEventListener {
 
     private static final String TAG = "DatabaseHandler";
 
-    // todo not only 1
-    private static final int MIN_DEVICE_COUNT = 1;
+    /*// todo remove comments
+    private static final int MIN_DEVICE_COUNT = 1;*/
 
     private static final String MAJOR_ACTIVE_EVENTS_REF = "major-active-events";
     private static final String EARTHQUAKES_REF = "earthquakes";
-    private static final String ACTIVE_EARTHQUAKES_REF = "active-earthquakes";
-    private static final String SAVED_EARTHQUAKES_REF = "saved-earthquakes";
+    private static final String SETTINGS_REF = "settings";
+
+    /*private static final String ACTIVE_EARTHQUAKES_REF = "active-earthquakes";
+    private static final String SAVED_EARTHQUAKES_REF = "saved-earthquakes";*/
 
     private static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     private DatabaseReference activeEventsRef;
     private DatabaseReference earthquakesRef;
-    private DatabaseReference activeEarthquakesRef;
-    private DatabaseReference savedEarthquakesRef;
+    private DatabaseReference settingsRef;
+    /*private DatabaseReference activeEarthquakesRef;
+    private DatabaseReference savedEarthquakesRef;*/
 
     private OnEarthquakeListener listener;
 
@@ -49,13 +52,20 @@ public class DatabaseHandler implements ChildEventListener {
     private boolean earthquakeIsActive = false;
     private Map<String, Boolean> devices;
 
+    private int minDeviceCount;
+
     public DatabaseHandler(OnEarthquakeListener listener) {
         activeEventsRef = databaseReference.child(MAJOR_ACTIVE_EVENTS_REF);
         earthquakesRef = databaseReference.child(EARTHQUAKES_REF);
-        activeEarthquakesRef = databaseReference.child(ACTIVE_EARTHQUAKES_REF);
-        savedEarthquakesRef = databaseReference.child(SAVED_EARTHQUAKES_REF);
+        settingsRef = databaseReference.child(SETTINGS_REF);
+        /*activeEarthquakesRef = databaseReference.child(ACTIVE_EARTHQUAKES_REF);
+        savedEarthquakesRef = databaseReference.child(SAVED_EARTHQUAKES_REF);*/
         this.listener = listener;
         this.devices = new HashMap<>();
+    }
+
+    public void setMinDeviceCount(int minDeviceCount) {
+        this.minDeviceCount = minDeviceCount;
     }
 
     public void addListener() {
@@ -123,6 +133,8 @@ public class DatabaseHandler implements ChildEventListener {
         });
 
         lastEarthquakeId = null;
+        earthquakeIsActive = false;
+        devices.clear();
 
         /*databaseReference.updateChildren(earthquakeTermination).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -157,7 +169,7 @@ public class DatabaseHandler implements ChildEventListener {
             // field of each EarthquakeEvent objects (one active event by device!!!)
             String deviceId = dataSnapshot.getKey();
             devices.put(deviceId, true);
-            if (devices.size() >= MIN_DEVICE_COUNT) {
+            if (devices.size() >= minDeviceCount) {
                 if (!earthquakeIsActive) {
                     addEarthquake(new Earthquake(devices, true, new Date().getTime()));
                     earthquakeIsActive = true;
@@ -179,11 +191,9 @@ public class DatabaseHandler implements ChildEventListener {
             // field of each EarthquakeEvent objects (one active event by device!!!)
             String deviceId = dataSnapshot.getKey();
             devices.remove(deviceId);
-            if (devices.size() < MIN_DEVICE_COUNT) {
+            if (devices.size() < minDeviceCount) {
                 if (earthquakeIsActive) {
                     terminateEarthquake();
-                    earthquakeIsActive = false;
-                    devices.clear();
                 }
             }
         }

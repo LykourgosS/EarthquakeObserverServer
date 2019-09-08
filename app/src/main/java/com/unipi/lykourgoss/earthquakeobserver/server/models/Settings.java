@@ -1,11 +1,22 @@
 package com.unipi.lykourgoss.earthquakeobserver.server.models;
 
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
  * on 06,September,2019.
  */
 
-public class ClientSettings {
+public class Settings implements Serializable {
+
+    public static final String SAMPLING_PERIOD = "samplingPeriod";
+    public static final String SAMPLES_BATCH_COUNT = "samplesBatchCount";
+    public static final String MIN_EVENT_DURATION = "minEventDuration";
+    public static final String DEFAULT_BALANCE_SENSOR_VALUE = "defaultBalanceSensorValue";
+    public static final String SENSOR_VALUE_THRESHOLD = "sensorValueThreshold";
+    public static final String CONFIG_DEVICE_REJECT_SAMPLE_THRESHOLD = "configDeviceRejectSampleThreshold";
+    public static final String LAST_UPDATE_TIMESTAMP = "lastUpdateTimestamp";
 
     /**
      * Used for registering listener in {@link com.unipi.lykourgoss.earthquakeobserver.client.services.EarthquakeManager},
@@ -61,16 +72,25 @@ public class ClientSettings {
      * */
     private float configDeviceRejectSampleThreshold;
 
-    public ClientSettings() {
+    /**
+     * Time in millis of the update
+     * */
+    private long lastUpdateTimestamp;
+
+    public Settings() {
     }
 
-    public ClientSettings(int samplingPeriod, int samplesBatchCount, long minEventDuration, float defaultBalanceSensorValue, float sensorValueThreshold, float configDeviceRejectSampleThreshold) {
+    public Settings(int samplingPeriod, int samplesBatchCount, long minEventDuration, float defaultBalanceSensorValue, float sensorValueThreshold, float configDeviceRejectSampleThreshold, long lastUpdateTimestamp) {
         this.samplingPeriod = samplingPeriod;
         this.samplesBatchCount = samplesBatchCount;
         this.minEventDuration = minEventDuration;
         this.defaultBalanceSensorValue = defaultBalanceSensorValue;
         this.sensorValueThreshold = sensorValueThreshold;
         this.configDeviceRejectSampleThreshold = configDeviceRejectSampleThreshold;
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    }
+
+    public Settings(Map<String, String> settings) {
     }
 
     public int getSamplingPeriod() {
@@ -95,5 +115,9 @@ public class ClientSettings {
 
     public float getConfigDeviceRejectSampleThreshold() {
         return configDeviceRejectSampleThreshold;
+    }
+
+    public long getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
     }
 }

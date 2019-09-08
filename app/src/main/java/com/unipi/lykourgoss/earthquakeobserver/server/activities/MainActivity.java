@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
-import com.unipi.lykourgoss.earthquakeobserver.server.models.ClientSettings;
 import com.unipi.lykourgoss.earthquakeobserver.server.models.Earthquake;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
@@ -32,29 +31,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_start_server).setOnClickListener(this);
         findViewById(R.id.button_stop_server).setOnClickListener(this);
         findViewById(R.id.button_add_earthquake).setOnClickListener(this);
-        findViewById(R.id.button_send_notification).setOnClickListener(this);
         findViewById(R.id.button_client_settings).setOnClickListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateUi(Util.isServiceRunning(this, ServerService.class));
-    }
-
-    private void updateUi(boolean serverStarted) {
-        findViewById(R.id.button_start_server).setEnabled(!serverStarted);
-        findViewById(R.id.button_stop_server).setEnabled(serverStarted);
+        findViewById(R.id.button_server_settings).setOnClickListener(this);
     }
 
     private void startServer() {
-        Util.scheduleStartJob(this);
-        updateUi(true);
+//        Util.scheduleStartJob(this);
+        Util.restartServer(this);
     }
 
     private void stopServer() {
         stopService(new Intent(this, ServerService.class));
-        updateUi(false);
     }
 
     private void addEarthquake() {
@@ -69,21 +56,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_add_earthquake).setEnabled(false);
     }
 
-    private void sendNotification() {
-        /*// The topic name can be optionally prefixed with "/topics/".
-        String topic = "highScores";
-
-        // See documentation on defining a message payload.
-        RemoteMessage message = new RemoteMessage.Builder("").build();
-
-        // Send a message to the devices subscribed to the provided topic.
-        FirebaseMessaging.getInstance().send(message);
-        // Response is a message ID string.
-//        System.out.println("Successfully sent message: " + response);*/
+    private void openClientSettings() {
+        startActivity(new Intent(this, ClientSettingsActivity.class));
     }
 
-    private void clientSettings() {
-        startActivity(new Intent(this, ClientSettingsActivity.class));
+    private void openServerSettings() {
+        startActivity(new Intent(this, ServerSettingsActivity.class));
     }
 
     @Override
@@ -98,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_add_earthquake:
                 addEarthquake();
                 break;
-            case R.id.button_send_notification:
-                sendNotification();
-                break;
             case R.id.button_client_settings:
-                clientSettings();
+                openClientSettings();
+                break;
+            case R.id.button_server_settings:
+                openServerSettings();
                 break;
         }
     }

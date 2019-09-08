@@ -15,6 +15,7 @@ import com.unipi.lykourgoss.earthquakeobserver.server.Constant;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
 import com.unipi.lykourgoss.earthquakeobserver.server.activities.MainActivity;
+import com.unipi.lykourgoss.earthquakeobserver.server.tools.SharedPrefManager;
 
 /**
  * Created by LykourgosS <lpsarantidis@gmail.com>
@@ -51,7 +52,9 @@ public class ServerService extends Service implements DatabaseHandler.OnEarthqua
             startForeground(Constant.SERVER_SERVICE_ID, notification); // id must be greater than 0
         }
 
+        int minDeviceCount = SharedPrefManager.getInstance(this).read(Constant.MIN_DEVICE_COUNT, 1);
         databaseHandler = new DatabaseHandler(this);
+        databaseHandler.setMinDeviceCount(minDeviceCount);
         databaseHandler.addListener();
 
         return START_STICKY;

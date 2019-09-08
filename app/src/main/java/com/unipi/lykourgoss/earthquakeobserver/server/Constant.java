@@ -19,6 +19,9 @@ public class Constant {
     // used for scheduling jobs
     public static final int START_SERVICE_JOB_ID = 2;
 
+    // Server min device count to report an earthquake
+    public static final String MIN_DEVICE_COUNT = "com.unipi.lykourgoss.earthquakeobserver.server.Constant.MIN_DEVICE_COUNT";
+
     // for Debugging purposes: custom action broadcasts
     public static final String FAKE_BOOT = "com.unipi.lykourgoss.earthquakeobserver.client.Constant.FAKE_BOOT";
     public static final String FAKE_POWER_DISCONNECTED = "com.unipi.lykourgoss.earthquakeobserver.client.Constant.FAKE_POWER_DISCONNECTED";

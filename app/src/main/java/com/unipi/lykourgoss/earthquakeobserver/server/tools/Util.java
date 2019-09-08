@@ -5,10 +5,14 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.unipi.lykourgoss.earthquakeobserver.server.Constant;
+import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.StartServerJobService;
 
 import java.util.List;
@@ -28,6 +32,7 @@ public class Util {
         // application, with the same jobId
         JobInfo jobInfo = new JobInfo.Builder(Constant.START_SERVICE_JOB_ID, serviceComponent)
                 .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //.setRequiresDeviceIdle(true)
                 //.setOverrideDeadline(1000) // The job will be run by this deadline even if other requirements are not met
                 //.setPersisted(true)
@@ -52,7 +57,14 @@ public class Util {
         }
     }
 
-    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+    public static void restartServer(Context context) {
+        Toast.makeText(context, "Server is restarting...", Toast.LENGTH_SHORT).show();
+        context.stopService(new Intent(context, ServerService.class));
+        Intent service = new Intent(context, ServerService.class);
+        ContextCompat.startForegroundService(context, service);
+    }
+
+    /*public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
@@ -60,5 +72,5 @@ public class Util {
             }
         }
         return false;
-    }
+    }*/
 }
