@@ -12,8 +12,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.unipi.lykourgoss.earthquakeobserver.server.models.Earthquake;
+import com.unipi.lykourgoss.earthquakeobserver.server.models.EarthquakeEvent;
+import com.unipi.lykourgoss.earthquakeobserver.server.models.MinimalDevice;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class DatabaseHandler implements ChildEventListener {
 
     private String lastEarthquakeId;
     private boolean earthquakeIsActive = false;
-    private Map<String, Boolean> devices;
+    private Map<String, MinimalDevice> devices;
 
     private int minDeviceCount;
 
@@ -106,11 +107,9 @@ public class DatabaseHandler implements ChildEventListener {
         lastEarthquakeId = id;
     }
 
-    private void updateEarthquake(String deviceId) {
-        // path: /earthquakes/{earthquakeId}/devices/{deviceId}. And the value: true
-        //savedEarthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(deviceId).setValue(true);
-
-        earthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(deviceId).setValue(true);
+    private void updateEarthquake(MinimalDevice device) {
+        // path: /earthquakes/{earthquakeId}/devices/{deviceId}. And the value: a MinimalDevice object
+        earthquakesRef.child(lastEarthquakeId).child(Earthquake.DEVICES).child(device.getDeviceId()).setValue(device);
     }
 
     private void terminateEarthquake() {
@@ -150,9 +149,9 @@ public class DatabaseHandler implements ChildEventListener {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Earthquake earthquake = dataSnapshot.getValue(Earthquake.class);
                 // add the earthquake to saved-earthquakes
-                savedEarthquakesRef.child(earthquake.getId()).setValue(earthquake);
+                savedEarthquakesRef.child(earthquake.getDeviceId()).setValue(earthquake);
                 // remove the earthquake from active-earthquakes
-                activeEarthquakesRef.child(earthquake.getId()).setValue(null);
+                activeEarthquakesRef.child(earthquake.getDeviceId()).setValue(null);
             }
 
             @Override
@@ -167,14 +166,18 @@ public class DatabaseHandler implements ChildEventListener {
         if (dataSnapshot.exists()) {
             // in path: /active-events, we store EarthquakeEvent objects using as keys the deviceId
             // field of each EarthquakeEvent objects (one active event by device!!!)
-            String deviceId = dataSnapshot.getKey();
-            devices.put(deviceId, true);
+            //String deviceId = dataSnapshot.getKey();
+            EarthquakeEvent event = dataSnapshot.getValue(EarthquakeEvent.class);
+            // create a new MinimalDevice object and adding it at the end of the list
+            MinimalDevice newDevice = new MinimalDevice(event);
+            devices.put(event.getDeviceId(), newDevice);
             if (devices.size() >= minDeviceCount) {
                 if (!earthquakeIsActive) {
                     addEarthquake(new Earthquake(devices, true, new Date().getTime()));
                     earthquakeIsActive = true;
                 } else {
-                    updateEarthquake(deviceId);
+                    // adding at the firebase the new MinimalDevice object that we just add in the devices list
+                    updateEarthquake(newDevice);
                 }
             }
         }
@@ -187,8 +190,8 @@ public class DatabaseHandler implements ChildEventListener {
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
         if (dataSnapshot.exists()) {
-            // in path: /active-events, we store EarthquakeEvent objects using as keys the deviceId
-            // field of each EarthquakeEvent objects (one active event by device!!!)
+            // in path: /major-active-events, we store EarthquakeEvent objects using as keys the
+            // deviceId field of each EarthquakeEvent objects (one active event by device!!!)
             String deviceId = dataSnapshot.getKey();
             devices.remove(deviceId);
             if (devices.size() < minDeviceCount) {

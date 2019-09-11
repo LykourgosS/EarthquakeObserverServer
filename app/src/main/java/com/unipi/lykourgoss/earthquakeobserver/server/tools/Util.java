@@ -6,6 +6,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import com.unipi.lykourgoss.earthquakeobserver.server.Constant;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.StartServerJobService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,6 +58,16 @@ public class Util {
         for (JobInfo job : jobs) {
             Log.d(TAG, "scheduleStartJob: " + job.toString());
         }
+    }
+
+    public static long nanosFromBootToMillis(long timeInNanos) {
+        return (new Date()).getTime() - SystemClock.elapsedRealtime() + timeInNanos / (1000 * 1000);
+    }
+
+    public static String millisToDateTime(long timeInMillis) {
+        Date date = new Date(timeInMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
+        return dateFormat.format(date);
     }
 
     public static void restartServer(Context context) {

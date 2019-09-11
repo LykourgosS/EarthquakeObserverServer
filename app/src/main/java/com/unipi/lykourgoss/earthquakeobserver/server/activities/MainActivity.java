@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
 import com.unipi.lykourgoss.earthquakeobserver.server.models.Earthquake;
+import com.unipi.lykourgoss.earthquakeobserver.server.models.MinimalDevice;
 import com.unipi.lykourgoss.earthquakeobserver.server.services.ServerService;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.DatabaseHandler;
 import com.unipi.lykourgoss.earthquakeobserver.server.tools.Util;
@@ -45,13 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addEarthquake() {
-        Map<String, Boolean> devices = new HashMap<>();
-        devices.put("A", true);
-        devices.put("nn", true);
-        devices.put("a", true);
-        devices.put("m", true);
-        devices.put("o", true);
-        devices.put("u", true);
+        Map<String, MinimalDevice> devices = new HashMap<>();
+        devices.put("A", new MinimalDevice());
+        devices.put("nn", new MinimalDevice());
+        devices.put("a", new MinimalDevice());
+        devices.put("m", new MinimalDevice());
+        devices.put("o", new MinimalDevice());
+        devices.put("u", new MinimalDevice());
         databaseHandler.addEarthquake(new Earthquake(devices, false, new Date().getTime()));
         findViewById(R.id.button_add_earthquake).setEnabled(false);
     }
