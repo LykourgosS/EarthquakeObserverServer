@@ -164,20 +164,25 @@ public class DatabaseHandler implements ChildEventListener {
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         if (dataSnapshot.exists()) {
-            // in path: /active-events, we store EarthquakeEvent objects using as keys the deviceId
+            // in path: /major-active-events, we store EarthquakeEvent objects using as keys the deviceId
             // field of each EarthquakeEvent objects (one active event by device!!!)
             //String deviceId = dataSnapshot.getKey();
             EarthquakeEvent event = dataSnapshot.getValue(EarthquakeEvent.class);
-            // create a new MinimalDevice object and adding it at the end of the list
-            MinimalDevice newDevice = new MinimalDevice(event);
-            devices.put(event.getDeviceId(), newDevice);
-            if (devices.size() >= minDeviceCount) {
-                if (!earthquakeIsActive) {
-                    addEarthquake(new Earthquake(devices, true, new Date().getTime()));
-                    earthquakeIsActive = true;
-                } else {
-                    // adding at the firebase the new MinimalDevice object that we just add in the devices list
-                    updateEarthquake(newDevice);
+            // checking that the event has been added successfully (there is a possibility if
+            // sampling period is too small or network's connection is slow the event has not been
+            // added completely)
+            if (event.getDeviceId() != null) {
+                // create a new MinimalDevice object and adding it at the end of the list
+                MinimalDevice newDevice = new MinimalDevice(event);
+                devices.put(event.getDeviceId(), newDevice);
+                if (devices.size() >= minDeviceCount) {
+                    if (!earthquakeIsActive) {
+                        addEarthquake(new Earthquake(devices, true, new Date().getTime()));
+                        earthquakeIsActive = true;
+                    } else {
+                        // adding at the firebase the new MinimalDevice object that we just add in the devices list
+                        updateEarthquake(newDevice);
+                    }
                 }
             }
         }
