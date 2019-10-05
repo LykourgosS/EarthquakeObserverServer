@@ -27,6 +27,12 @@
         android:text="Add Earthquake" />
 
     <Button
+        android:id="@+id/button_clear_earthquakes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Earthquakes" />
+
+    <Button
         android:id="@+id/button_client_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

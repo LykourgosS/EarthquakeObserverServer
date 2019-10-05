@@ -36,21 +36,18 @@ public class ServerService extends Service implements DatabaseHandler.OnEarthqua
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentNotification, 0);
 
-        // todo only use foreground service on Oreo an higher -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-        if (true) { // if API is v.26 and higher start a foreground service
-            Notification notification = new NotificationCompat.Builder(this, Constant.OBSERVER_SERVICE_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_cast_connected_white_24dp)
-                    .setContentTitle("Server title")
-                    .setContentText("server text...")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .build();
+        Notification notification = new NotificationCompat.Builder(this, Constant.OBSERVER_SERVICE_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_cast_connected_white_24dp)
+                .setContentTitle("Earthquake Observer Server")
+                .setContentText("server is running...")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .build();
 
-            // when service started with:
-            // 1. startService() -> without the following line system will kill the service after 1 min
-            // 2. startForegroundService() -> if not called in 5 seconds max system will kill the service (on API v.26)
-            startForeground(Constant.SERVER_SERVICE_ID, notification); // id must be greater than 0
-        }
+        // when service started with:
+        // 1. startService() -> without the following line system will kill the service after 1 min
+        // 2. startForegroundService() -> if not called in 5 seconds max system will kill the service (on API v.26)
+        startForeground(Constant.SERVER_SERVICE_ID, notification); // id must be greater than 0
 
         int minDeviceCount = SharedPrefManager.getInstance(this).read(Constant.MIN_DEVICE_COUNT, 1);
         databaseHandler = new DatabaseHandler(this);

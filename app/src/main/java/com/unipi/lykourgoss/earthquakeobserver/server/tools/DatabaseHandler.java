@@ -161,6 +161,10 @@ public class DatabaseHandler implements ChildEventListener {
         });*/
     }
 
+    public void deleteAllEarthquakes() {
+        earthquakesRef.setValue(null);
+    }
+
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         if (dataSnapshot.exists()) {

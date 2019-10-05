@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_start_server).setOnClickListener(this);
         findViewById(R.id.button_stop_server).setOnClickListener(this);
         findViewById(R.id.button_add_earthquake).setOnClickListener(this);
+        findViewById(R.id.button_clear_earthquakes).setOnClickListener(this);
         findViewById(R.id.button_client_settings).setOnClickListener(this);
         findViewById(R.id.button_server_settings).setOnClickListener(this);
     }
@@ -57,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_add_earthquake).setEnabled(false);
     }
 
+    private void clearEarthquakes() {
+        databaseHandler.deleteAllEarthquakes();
+    }
+
     private void openClientSettings() {
         startActivity(new Intent(this, ClientSettingsActivity.class));
     }
@@ -76,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_add_earthquake:
                 addEarthquake();
+                break;
+            case R.id.button_clear_earthquakes:
+                clearEarthquakes();
                 break;
             case R.id.button_client_settings:
                 openClientSettings();
