@@ -37,7 +37,7 @@ public class ServerService extends Service implements DatabaseHandler.OnEarthqua
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentNotification, 0);
 
         Notification notification = new NotificationCompat.Builder(this, Constant.OBSERVER_SERVICE_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_cast_connected_white_24dp)
+                .setSmallIcon(R.drawable.ic_visibility_black_24dp)
                 .setContentTitle("Earthquake Observer Server")
                 .setContentText("server is running...")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
