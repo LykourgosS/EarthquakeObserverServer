@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.unipi.lykourgoss.earthquakeobserver.server.R;
-import com.unipi.lykourgoss.earthquakeobserver.server.filestoremove.DatabaseHandlerOld;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {
 
@@ -33,8 +32,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private FirebaseAuth firebaseAuth;
 
     private GoogleSignInClient googleSignInClient;
-
-    private DatabaseHandlerOld databaseHandlerOld;
 
     /**
      * On the sign in button clicked methods called accordingly:
